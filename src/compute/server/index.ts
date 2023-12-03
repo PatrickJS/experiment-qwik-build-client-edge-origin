@@ -64,16 +64,17 @@ export const serverQrl: ServerConstructorQRL = (
           ? (args.shift() as AbortSignal)
           : undefined;
       if (isServer) {
-        console.log('on server')
+        console.log('on server');
         const requestEvent = [this, _getContextEvent()].find(
           (v) =>
           v &&
           Object.prototype.hasOwnProperty.call(v, "sharedMap") &&
           Object.prototype.hasOwnProperty.call(v, "cookie")
         );
-        console.log('on server', requestEvent, args)
+        console.log('on server', requestEvent, args);
         return qrl.apply(requestEvent, args);
       } else {
+        console.log('on on client');
         const ctxElm = _getContextElement();
         const filtered = args.map((arg) => {
           if (
