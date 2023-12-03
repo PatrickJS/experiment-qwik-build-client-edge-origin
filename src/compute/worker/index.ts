@@ -32,7 +32,7 @@ const getWorker = (qrl: QRL) => {
       (worker = new Worker(workerUrl, {
         name: `worker$(${qrl.getSymbol()})`,
         type: "module",
-      }))
+      })),
     );
   }
   return worker;
@@ -42,7 +42,7 @@ export const workerQrl: WorkerConstructorQRL = (qrl) => {
   return $(async (...args: any[]) => {
     const containerEl =
       (_getContextElement() as HTMLElement | undefined)?.closest(
-        "[q\\:container]"
+        "[q\\:container]",
       ) ?? document.documentElement;
     const worker = getWorker(qrl);
     const requestId = getWorkerRequest();
