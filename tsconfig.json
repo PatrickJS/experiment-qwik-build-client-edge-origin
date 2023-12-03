@@ -22,5 +22,12 @@
     }
   },
   "files": ["./.eslintrc.cjs"],
-  "include": ["src", "./*.d.ts", "./*.config.ts"]
+  "include": [
+    "src",
+    "servers/*.tsx",
+    "./*.d.ts",
+    "./*.config.ts",
+    "servers/origin/origin.tsx",
+    "servers/edge/edge.tsx"
+  ]
 }
