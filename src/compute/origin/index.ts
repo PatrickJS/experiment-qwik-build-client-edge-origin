@@ -87,7 +87,7 @@ export const originQrl: ServerConstructorQRL = (
           return arg;
         });
         const hash = qrl.getHash();
-        const origin = "";
+        const origin = "http://localhost:8081";
         // const origin = window.location.origin;
         // change url or change origin to resolve to edge first
         const res = await fetch(`${origin}?qfunc=${hash}`, {

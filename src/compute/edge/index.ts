@@ -87,8 +87,9 @@ export const edgeQrl: ServerConstructorQRL = (
           return arg;
         });
         const hash = qrl.getHash();
+        const origin = "http://localhost:8082";
         // change url or change origin to resolve to edge first
-        const res = await fetch(`?qfunc=${hash}`, {
+        const res = await fetch(`${origin}/?qfunc=${hash}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/qwik-json",

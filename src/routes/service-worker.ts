@@ -9,6 +9,15 @@
  */
 import { setupServiceWorker } from "@builder.io/qwik-city/service-worker";
 
+console.log("service-worker.ts");
+// listen for certain post events to intercept and handle
+self.addEventListener("fetch", (event) => {
+  console.log("fetch event", event);
+  if (event.request.url) {
+    console.log("event.request.url", event.request.url);
+  }
+});
+
 setupServiceWorker();
 
 addEventListener("install", () => self.skipWaiting());
@@ -16,3 +25,4 @@ addEventListener("install", () => self.skipWaiting());
 addEventListener("activate", () => self.clients.claim());
 
 declare const self: ServiceWorkerGlobalScope;
+

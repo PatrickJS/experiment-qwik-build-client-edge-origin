@@ -1,5 +1,5 @@
+import type { QRL } from "@builder.io/qwik";
 import {
-  QRL,
   _deserializeData,
   _getContextElement,
   _getContextEvent,
@@ -7,7 +7,7 @@ import {
   implicit$FirstArg,
   $,
 } from "@builder.io/qwik";
-import { RequestEventBase } from "@builder.io/qwik-city";
+import type { RequestEventBase } from "@builder.io/qwik-city";
 import { isServer } from "@builder.io/qwik/build";
 
 declare interface ServerConstructorQRL {
@@ -28,7 +28,7 @@ const deserializeStream = async function* (
   try {
     let buffer = "";
     const decoder = new TextDecoder();
-    while (!signal?.aborted) {
+    while (!signal.aborted) {
       const result = await reader?.read();
       if (result?.done) break;
       buffer += decoder.decode(result?.value, {
@@ -45,11 +45,10 @@ const deserializeStream = async function* (
 };
 
 // @ts-ignore
-export const serverQrl: ServerConstructorQRL = (
+export const edgeQrl: ServerConstructorQRL = (
   qrl: QRL<(...args: any[]) => any>
 ) => {
   if (isServer) {
-    console.log('on server Error');
     const captured = qrl.getCaptured();
     if (captured && captured.length > 0 && !_getContextElement()) {
       throw new Error(
@@ -59,24 +58,20 @@ export const serverQrl: ServerConstructorQRL = (
   }
 
   function rpc() {
-    console.log('invoke server$');
     return $(async function (this: any, ...args: any[]) {
       const signal =
         args.length > 0 && args[0] instanceof AbortSignal
           ? (args.shift() as AbortSignal)
           : undefined;
       if (isServer) {
-        console.log('on server');
         const requestEvent = [this, _getContextEvent()].find(
           (v) =>
-          v &&
-          Object.prototype.hasOwnProperty.call(v, "sharedMap") &&
-          Object.prototype.hasOwnProperty.call(v, "cookie")
+            v &&
+            Object.prototype.hasOwnProperty.call(v, "sharedMap") &&
+            Object.prototype.hasOwnProperty.call(v, "cookie")
         );
-        console.log('on server', requestEvent, args);
         return qrl.apply(requestEvent, args);
       } else {
-        console.log('on on client');
         const ctxElm = _getContextElement();
         const filtered = args.map((arg) => {
           if (
@@ -92,7 +87,9 @@ export const serverQrl: ServerConstructorQRL = (
           return arg;
         });
         const hash = qrl.getHash();
-        const res = await fetch(`?qfunc=${hash}`, {
+        const origin = "";
+        // change url or change origin to resolve to edge first
+        const res = await fetch(`${origin}/?qfunc=${hash}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/qwik-json",
@@ -137,4 +134,4 @@ export const serverQrl: ServerConstructorQRL = (
 };
 
 /** @public */
-export const server$ = /*#__PURE__*/ implicit$FirstArg(serverQrl);
+export const edge$ = /*#__PURE__*/ implicit$FirstArg(edgeQrl);
