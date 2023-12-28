@@ -1,12 +1,27 @@
-import { component$ } from "@builder.io/qwik";
+import {
+  component$,
+  // useSignal,
+} from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { worker$ } from "~/compute/worker";
 import { aot$ } from "~/compute/aot";
 import { server$ } from "~/compute/server";
 import { edge$ } from "~/compute/edge";
 import { origin$ } from "~/compute/origin";
+import { useClient$ } from "~/compute/client";
+
+import update, { value } from "./data";
 
 export default component$(() => {
+  update(value + 1);
+  console.log("on server", value);
+  // const sig = useSignal();
+  useClient$(() => {
+    update(value + 1);
+    console.log("on client", value);
+    update(value + 1);
+    console.log("on client", value);
+  });
   return (
     <>
       <div>Hello world</div>

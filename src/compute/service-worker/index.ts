@@ -45,7 +45,7 @@ const deserializeStream = async function* (
 };
 
 // @ts-ignore
-export const edgeQrl: ServerConstructorQRL = (
+export const serviceWorkerQrl: ServerConstructorQRL = (
   qrl: QRL<(...args: any[]) => any>
 ) => {
   if (isServer) {
@@ -134,4 +134,4 @@ export const edgeQrl: ServerConstructorQRL = (
 };
 
 /** @public */
-export const edge$ = /*#__PURE__*/ implicit$FirstArg(edgeQrl);
+export const serviceWorker$ = /*#__PURE__*/ implicit$FirstArg(serviceWorkerQrl);
